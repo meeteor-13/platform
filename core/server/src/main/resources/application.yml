@@ -1,0 +1,32 @@
+application:
+  jobs:
+    intersection:
+      cron: "*/5 * * * *"
+
+server:
+  port: 8080
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://meeteor13:meeteor13@localhost:27017/meeteor13
+#  security:
+#    oauth2:
+#      resourceserver:
+#        resource-id: ${core}
+#        jwt:
+#          issuer-uri: http://localhost:8081/auth/realms/meeteor13
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - info
+          - health
+          - metrics
+          - prometheus
+
+logging:
+  level:
+    com.github.meeteor13.core: DEBUG
