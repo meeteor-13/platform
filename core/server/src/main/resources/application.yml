@@ -10,12 +10,12 @@ spring:
   data:
     mongodb:
       uri: mongodb://meeteor13:meeteor13@localhost:27017/meeteor13
-#  security:
-#    oauth2:
-#      resourceserver:
-#        resource-id: ${core}
-#        jwt:
-#          issuer-uri: http://localhost:8081/auth/realms/meeteor13
+  security:
+    oauth2:
+      resourceserver:
+        resource-id: core
+        jwt:
+          issuer-uri: http://localhost:8081/auth/realms/meeteor13
 
 management:
   endpoints:
