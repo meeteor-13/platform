@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 public class KeyCloakGrantedAuthoritiesConverter implements Converter<Jwt, AbstractAuthenticationToken> {
@@ -24,16 +25,24 @@ public class KeyCloakGrantedAuthoritiesConverter implements Converter<Jwt, Abstr
 
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
-        final List<GrantedAuthority> authorities = Optional
-            .ofNullable(jwt.getClaimAsMap(RESOURCE_ACCESS_CLAIMS))
-            .map(claim -> (Map<String, List<String>>) claim.get(resourceId))
-            .map(resource -> resource.get(ROLES_KEY))
-            .stream()
-            .flatMap(List::stream)
-            .map(authority -> SCOPE_AUTHORITY_PREFIX + authority.toUpperCase())
+        final List<GrantedAuthority> authorities = extractRoles(jwt)
+            .map(role -> SCOPE_AUTHORITY_PREFIX + role.toUpperCase())
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
         return new JwtAuthenticationToken(jwt, authorities);
+    }
+
+    private Stream<String> extractRoles(Jwt jwt) {
+        return Optional
+            .ofNullable(jwt.getClaimAsMap(RESOURCE_ACCESS_CLAIMS))
+            .map(claim -> claim.get(resourceId))
+            .filter(Map.class::isInstance)
+            .map(Map.class::cast)
+            .map(resource -> resource.get(ROLES_KEY))
+            .filter(List.class::isInstance)
+            .map(List.class::cast)
+            .stream()
+            .flatMap(List::stream);
     }
 }
 
