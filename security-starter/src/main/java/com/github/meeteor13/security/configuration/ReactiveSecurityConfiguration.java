@@ -1,8 +1,7 @@
-package com.github.meeteor13.core.configuration;
+package com.github.meeteor13.security.configuration;
 
-import com.github.meeteor13.core.converter.KeyCloakGrantedAuthoritiesConverter;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import com.github.meeteor13.security.converter.KeyCloakGrantedAuthoritiesConverter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.reactive.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,13 +16,12 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import reactor.core.publisher.Mono;
 
 @Configuration
-@ConditionalOnProperty("spring.security.oauth2.resourceserver.resource-id")
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
-public class SecurityConfiguration {
+@RequiredArgsConstructor
+class ReactiveSecurityConfiguration {
 
-    @Value("${spring.security.oauth2.resourceserver.resource-id}")
-    private String resourceId;
+    private final ExtendedOAuth2ResourceServerProperties properties;
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
@@ -46,6 +44,6 @@ public class SecurityConfiguration {
 
     @Bean
     public Converter<Jwt, Mono<AbstractAuthenticationToken>> keyCloakGrantedAuthoritiesConverter() {
-        return new ReactiveJwtAuthenticationConverterAdapter(new KeyCloakGrantedAuthoritiesConverter(resourceId));
+        return new ReactiveJwtAuthenticationConverterAdapter(new KeyCloakGrantedAuthoritiesConverter(properties.getResourceId()));
     }
 }
