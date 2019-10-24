@@ -1,0 +1,78 @@
+version: "3.7"
+
+services:
+  core_db:
+    container_name: core_db
+    image: bitnami/mongodb:4.1.13-debian-9-r12
+    environment:
+      MONGODB_USERNAME: meeteor13
+      MONGODB_PASSWORD: meeteor13
+      MONGODB_DATABASE: meeteor13
+    restart: on-failure
+    ports:
+      - 27017:27017
+    networks:
+      - internal
+    volumes:
+      - core_db_data:/bitnami
+
+  core:
+    container_name: core
+    image: meeteor13/core:latest
+    build: ./core/server
+    depends_on:
+      - core_db
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://meeteor13:meeteor13@core_db:27017/meeteor13
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://auth:8080/auth/realms/meeteor13
+    restart: on-failure
+    ports:
+      - 8080:80
+    networks:
+      - internal
+
+  authorization_db:
+    container_name: authorization-db
+    image: postgres:11.2
+    environment:
+      POSTGRES_USER: meeteor13
+      POSTGRES_PASSWORD: meeteor13
+      POSTGRES_DB: meeteor13
+    ports:
+      - 5432:5432
+    networks:
+      - internal
+    volumes:
+      - authorization_db:/var/lib/postgresql
+
+  auth:
+    container_name: auth
+    image: jboss/keycloak:6.0.1
+    depends_on:
+      - authorization_db
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: authorization_db
+      DB_PORT: 5432
+      DB_DATABASE: meeteor13
+      DB_SCHEMA: public
+      DB_USER: meeteor13
+      DB_PASSWORD: meeteor13
+      KEYCLOAK_USER: meeteor13
+      KEYCLOAK_PASSWORD: meeteor13
+      PROXY_ADDRESS_FORWARDING: "true"
+      KEYCLOAK_IMPORT: /tmp/realm-export.json
+    ports:
+      - 8081:8080
+    volumes:
+      - ./keycloak/realm-export.json:/tmp/realm-export.json
+    networks:
+      - internal
+
+volumes:
+  core_db_data:
+  authorization_db:
+
+networks:
+  internal:
+    driver: bridge
