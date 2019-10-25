@@ -1,9 +1,9 @@
 package com.github.meeteor13.core.domain;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
 @Builder
 public class Place {
     private final String id;

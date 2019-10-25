@@ -1,12 +1,11 @@
 package com.github.meeteor13.core.domain;
 
 import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
+import lombok.Value;
 
 import java.util.Date;
 
-@Data
+@Value
 @Builder
 public class Location {
     private final String id;

@@ -6,5 +6,9 @@ import reactor.core.publisher.Flux;
 import java.util.Date;
 
 public interface IntersectionService {
-    Flux<Intersection> calculate(Date startDate, Date endDate);
+    Flux<Intersection> process(Date startDate, Date endDate);
+
+    Flux<Intersection> findAll();
+
+    Flux<Intersection> findAllByUserId(Long userId);
 }

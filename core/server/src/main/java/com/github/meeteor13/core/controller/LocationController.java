@@ -1,7 +1,7 @@
 package com.github.meeteor13.core.controller;
 
 import com.github.meeteor13.core.domain.Location;
-import com.github.meeteor13.core.repository.LocationRepository;
+import com.github.meeteor13.core.service.LocationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class LocationController {
 
-    private final LocationRepository locationRepository;
+    private final LocationService service;
 
     @PreAuthorize("hasRole('LOCATION_READ')")
     @GetMapping(
@@ -24,8 +24,7 @@ public class LocationController {
         }
     )
     public Flux<Location> findAll() {
-//        return locationRepository.findAll();
-        return Flux.empty();
+        return service.findAll();
     }
 
     @GetMapping(
@@ -38,14 +37,12 @@ public class LocationController {
         }
     )
     public Flux<Location> findAllByUserId(@RequestParam Long userId) {
-//        return locationRepository.findAllByUserId(userId);
-        return Flux.empty();
+        return service.findAllByUserId(userId);
     }
 
     @PreAuthorize("hasRole('LOCATION_CREATE')")
     @PostMapping
     public Mono<Location> save(@RequestBody Location location) {
-//        return locationRepository.save(location);
-        return Mono.empty();
+        return service.save(location);
     }
 }

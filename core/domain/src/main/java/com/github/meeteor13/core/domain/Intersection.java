@@ -1,12 +1,12 @@
 package com.github.meeteor13.core.domain;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 
 import java.util.Set;
 
 
-@Data
+@Value
 @Builder
 public class Intersection {
     private final String id;

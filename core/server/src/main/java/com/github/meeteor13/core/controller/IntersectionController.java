@@ -1,7 +1,7 @@
 package com.github.meeteor13.core.controller;
 
 import com.github.meeteor13.core.domain.Intersection;
-import com.github.meeteor13.core.repository.IntersectionRepository;
+import com.github.meeteor13.core.service.IntersectionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,7 +16,7 @@ import reactor.core.publisher.Flux;
 @RequiredArgsConstructor
 public class IntersectionController {
 
-    private final IntersectionRepository intersectionRepository;
+    private final IntersectionService service;
 
     @PreAuthorize("hasRole('INTERSECTION_READ')")
     @GetMapping(
@@ -26,8 +26,7 @@ public class IntersectionController {
         }
     )
     public Flux<Intersection> findAll() {
-//        return intersectionRepository.findAll();
-        return Flux.empty();
+        return service.findAll();
     }
 
     @PreAuthorize("hasRole('INTERSECTION_READ')")
@@ -41,7 +40,6 @@ public class IntersectionController {
         }
     )
     public Flux<Intersection> findAllByUserId(@RequestParam Long userId) {
-//        return intersectionRepository.findAllByUsersContains(userId);
-        return Flux.empty();
+        return service.findAllByUserId(userId);
     }
 }
