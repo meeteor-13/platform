@@ -11,5 +11,5 @@ public interface PointMapper {
 
     Point map(PointEntity entity);
 
-    PointEntity map(Point point);
+    PointEntity map(Point dto);
 }
