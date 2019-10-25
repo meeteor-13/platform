@@ -11,7 +11,7 @@ import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class LocationRepositoryTest extends AbstractIntegrationTest {
+class LocationRepositoryTest extends AbstractRepositoryTest {
 
     @Autowired
     private LocationRepository repository;
