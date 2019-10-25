@@ -1,17 +1,17 @@
 package com.github.meeteor13.core.entity;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-@Value
+@Data
 @Builder
 public class PlaceEntity {
     @Id
-    private final String id;
-    private final String title;
-    private final String address;
-    private final Point point;
+    private String id;
+    private String title;
+    private String address;
+    private PointEntity point;
 }

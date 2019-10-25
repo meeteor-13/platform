@@ -1,11 +1,11 @@
 package com.github.meeteor13.core.entity;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
-@Value
+@Data
 @Builder
 public class PointEntity {
-    private final double x;
-    private final double y;
+    private double x;
+    private double y;
 }
